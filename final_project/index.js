@@ -3,9 +3,7 @@ const jwt = require('jsonwebtoken');
 const session = require('express-session')
 const customer_routes = require('./router/auth_users.js').authenticated;
 const genl_routes = require('./router/general.js').general;
-const cors = require('cors');
 
-app.use(cors()); // Allow all origins for testing (or restrict it for production)
 
 
 const app = express();
