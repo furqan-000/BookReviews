@@ -12,7 +12,7 @@ const isValid = (username)=>{ //returns boolean
 
 const authenticatedUser = (username,password)=>{ //returns boolean
 //write code to check if username and password match the one we have in records.
-    const user = user.find(user => user.username === username);
+    const user = users.find(user => user.username === username);
     return user ? user.password === password: false;
 }
 
