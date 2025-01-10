@@ -32,7 +32,7 @@ regd_users.post("/login", (req,res) => {
   const token = jwt.sign({ username }, 'secret-key', {expiresIn:'1hr'});
   req.session.authorization = { token, username }; 
 
-  return res.status(200).json({message: "Login Successful", token})
+  return res.status(200).json({message: "Login Successful", token});
 
 });
 
