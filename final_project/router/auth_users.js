@@ -36,6 +36,22 @@ regd_users.post("/login", (req,res) => {
 
 });
 
+const authenticateJWT = (req, res, next) => {
+    const token = req.header("Authorization")?.split(" ")[1];
+
+    if (!token) {
+        return res.status(403).json({message: "Token is required"});
+    }
+
+    jwt.verify(token, 'secret-key', (err, user)=> {
+        if(err) {
+            return res.status(403).json({message: "Invalid or expired token"});
+        }
+        req.user = user;
+        next();
+    });
+};
+
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
   //Write your code here
