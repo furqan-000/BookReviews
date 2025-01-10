@@ -7,8 +7,7 @@ let users = [
     { username: "furqan-000", password: "admin"}
 ];
 
-const isValid = (username)=>{ //returns boolean
-//write code to check is the username is valid
+const isValid = (username)=>{ 
     return !users.find(user => user.username === username);
 }
 
@@ -20,45 +19,54 @@ const authenticatedUser = (username,password)=>{ //returns boolean
 
 //only registered users can login
 regd_users.post("/login", (req,res) => {
-  //Write your code here
-  const { username, password } = req.body;
-
-  if (!username || !password) {
+    const { username, password } = req.body;
+    if (!username || !password) {
     return res.status(400).json({message: "Username and password is required"});
-  }
+    }
 
-  if (!authenticatedUser(username, password)) {
+    if (!authenticatedUser(username, password)) {
     return res.status(401).json({message: "Invalid username or password"});
-  }
+    }
 
-  const token = jwt.sign({ username }, 'secret-key', {expiresIn:'1hr'});
+    const token = jwt.sign({ username }, 'secret-key', {expiresIn:'1hr'});
+    req.session.authorization = { token, username };
 
-  return res.status(200).json({
-    message: "Login Successful", 
-    token, });
+    return res.status(200).json({message: "Login Successful", token });
 
 });
 
-const authenticateJWT = (req, res, next) => {
-    const token = req.header("Authorization")?.split(" ")[1];
-
-    if (!token) {
-        return res.status(403).json({message: "Token is required"});
-    }
-
-    jwt.verify(token, 'secret-key', (err, user)=> {
-        if(err) {
-            return res.status(403).json({message: "Invalid or expired token"});
-        }
-        req.user = user;
-        next();
-    });
-};
-
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+    const isbn = req.params.isbn;
+    const review = req.body.review;
+    const username = req.user?.username; // Retrieved from the JWT token in the middleware
+  
+    if (!username) {
+      return res.status(401).json({ message: "Unauthorized access" });
+    }
+  
+    if (books[isbn]) {
+      books[isbn].reviews[username] = review; // Add or modify the review for this user
+      return res.status(200).json({ message: "Review added/updated successfully" });
+    } else {
+      return res.status(404).json({ message: "Book not found" });
+    }
+});
+
+regd_users.delete("/auth/review/:isbn", (req, res) => {
+    const isbn = req.params.isbn;
+    const username = req.user?.username; // Retrieved from the JWT token in the middleware
+
+    if (!username) {
+        return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    if (books[isbn] && books[isbn].reviews[username]) {
+        delete books[isbn].reviews[username]; // Remove the review for this user
+        return res.status(200).json({ message: "Review deleted successfully" });
+    } else {
+        return res.status(404).json({ message: "Review not found or unauthorized" });
+    }
 });
 
 module.exports.authenticated = regd_users;
