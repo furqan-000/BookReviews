@@ -3,9 +3,7 @@ const jwt = require('jsonwebtoken');
 let books = require("./booksdb.js");
 const regd_users = express.Router();
 
-let users = [ 
-    { username: "furqan-000", password: "admin"}
-];
+let users = [];
 
 const isValid = (username)=>{ 
     return !users.find(user => user.username === username);
@@ -13,7 +11,8 @@ const isValid = (username)=>{
 
 const authenticatedUser = (username,password)=>{ //returns boolean
 //write code to check if username and password match the one we have in records.
-    return !!users.find(user => user.username === username && user.password === password);
+    const user = users.find(user => user.username === username && user.password === password);
+    return !!user;
 
 }
 
