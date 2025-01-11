@@ -40,7 +40,7 @@ regd_users.post("/login", (req,res) => {
 regd_users.put("/auth/review/:isbn", (req, res) => {
     const isbn = req.params.isbn;
     const review = req.body.review;
-    const username = req.user?.username; // Retrieved from the JWT token in the middleware
+    const username = req.user?.username; // Retrieved the JWT token
   
     if (!username) {
       return res.status(401).json({ message: "Unauthorized access" });
@@ -48,7 +48,7 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
   
     if (books[isbn]) {
       books[isbn].reviews[username] = review; // Add or modify the review for this user
-      return res.status(200).json({ message: "Review added/updated successfully" });
+      return res.status(200).json({ message: "Review added successfully" });
     } else {
       return res.status(404).json({ message: "Book not found" });
     }
@@ -56,7 +56,7 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
 
 regd_users.delete("/auth/review/:isbn", (req, res) => {
     const isbn = req.params.isbn;
-    const username = req.user?.username; // Retrieved from the JWT token in the middleware
+    const username = req.user?.username; // Retrieved the JWT token
 
     if (!username) {
         return res.status(401).json({ message: "Unauthorized" });
