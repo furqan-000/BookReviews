@@ -48,7 +48,7 @@ public_users.get('/isbn/:isbn', async function (req, res) {
   } catch (err) {
     res.status(500).json({ message: "An error occurred", error: err.message });
   }
- });
+});
   
 // Get book details based on author ( Task # 12 - Details based on author using Promises)
 public_users.get('/author/:author',function (req, res) {
