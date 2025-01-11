@@ -45,6 +45,10 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
     if (!username) {
       return res.status(401).json({ message: "Unauthorized access" });
     }
+
+    if (!review) {
+        return res.status(400).json({ message: "Review is required" });
+    }
   
     if (books[isbn]) {
       books[isbn].reviews[username] = review; // Add or modify the review for this user
