@@ -26,8 +26,9 @@ app.use("/customer/auth/*", function auth(req,res,next){
     if (!token) {
         return res.status(401).json({ message: "Authentication token is missing" });
     }
+    console.log('Token recieved:', token); // Debugging
 
-    jwt.verify(token, "fingerprint_customer", (err, user) => {
+    jwt.verify(token, "secret-key", (err, user) => {
         if (err) {
             return res.status(403).json({ message: "Invalid token" });
         }
