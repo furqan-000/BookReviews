@@ -19,7 +19,7 @@ public_users.post("/register", (req,res) => {
 
   users[username] = {password: password};
 
-  return res.status(201).json({message: "User successfully registered"});
+  return res.status(200).json({message: "User successfully registered"});
 });
 
 // Get the book list available in the shop
